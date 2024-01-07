@@ -5,7 +5,7 @@ import os
 import sys
 from urllib.parse import urljoin
 
-def DownloadFilesFromUrl(url):
+def DownloadFilesFromUrl(url, download_folder):
     base_url = 'https://mp3.hardcore.lt/'
     try:
         response = requests.get(url)
@@ -13,16 +13,15 @@ def DownloadFilesFromUrl(url):
             soup = BeautifulSoup(response.text, 'html.parser')
             file_links = soup.find_all('a', href=True)
 
-            if not os.path.exists('downloaded_files'):
-                os.makedirs('downloaded_files')
+            if not os.path.exists(download_folder):
+                os.makedirs(download_folder)
 
             for link in file_links:
                 file_url = link['href']
                 if file_url.endswith(('.mp3', '.ogg', '.waw', '.flac')):
                     absolute_file_url = urljoin(base_url, file_url)
                     filename = os.path.basename(absolute_file_url)
-                    file_path = os.path.join('downloaded_files', filename)
-                    
+                    file_path = os.path.join(download_folder, filename)
                     try:
                         urllib.request.urlretrieve(absolute_file_url, file_path)
                         print(f"Downloaded: {filename}")
@@ -35,6 +34,7 @@ def DownloadFilesFromUrl(url):
 
 if len(sys.argv) > 1:
     custom_url = sys.argv[1]
-    DownloadFilesFromUrl(custom_url)
+    download_folder = sys.argv[2] if len(sys.argv) > 2 else "downloads"
+    DownloadFilesFromUrl(custom_url, download_folder)
 else:
     print("Please provide a URL.")
