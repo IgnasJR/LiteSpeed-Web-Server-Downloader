@@ -1,4 +1,4 @@
-A python script to download audio files from mp3.hardcore.lt and create .mp4 files of them.
+A python script to download audio files from LiteSpeed Web Server (written and tested on and for mp3.hardcore.lt) and create .mp4 files of them.
 
 Required depedencies:
 
